@@ -1,0 +1,30 @@
+{
+  "name": "company-organizer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RMcwey/Company-Organizer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RMcwey/Company-Organizer/issues"
+  },
+  "homepage": "https://github.com/RMcwey/Company-Organizer#readme",
+  "dependencies": {
+    "ascii-art": "^2.8.5",
+    "ascii-art-table": "^1.0.1",
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.2",
+    "mysql2": "^2.3.3"
+  },
+  "devDependencies": {
+    "press-any-key": "^0.1.1"
+  }
+}
