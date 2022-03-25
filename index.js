@@ -5,6 +5,8 @@ const cTable = require('console.table');
 const pressAnyKey = require('press-any-key');
 const Font = require('ascii-art-font');
 
+
+let roles = ""
 // Connect to database
 const db = mysql.createConnection(
   {
@@ -65,6 +67,24 @@ function executeCommand(initialize) {
     });
 
     } else if (initialize === 'Add Employee') {
+      
+      db.query("SELECT job_title FROM roles", function (err, results) {
+        if (err) {
+        console.log(err)
+        return;
+        } else {
+         
+          roles = results;
+          var rolesArr = []
+          // console.log(rolesArr);
+          for (let i = 0; i < roles.length; i++) {
+            rolesArr[i] = roles[i].job_title
+            // console.log(roles[i].job_title)
+            // console.log(rolesArr);
+          }
+       
+
+      console.log(rolesArr);
       inquirer.prompt([
         {
           type: 'input',
@@ -73,33 +93,39 @@ function executeCommand(initialize) {
         },
         {
           type: 'input',
-          message: "What is your new Employee's First Name?",
-          name: "first_name",
-        }
+          message: "What is your new Employee's Last Name?",
+          name: "last_name",
+        },
+        {
+          type: 'rawlist',
+          name: 'roles',
+          message: "What is the employee's role? (Use arrow keys)",
+          choices: rolesArr,
+        },
        
       ]).then((answers) => {
-        var initialize = answers.initialize;
-        executeCommand(initialize);
+        console.log(answers);
       });
-
-      db.query("SELECT * FROM employees", function (err, results) {
-        if (err) {
-        console.log(err)
-        return;
-        } else {
-          let employeesTable = cTable.getTable(results) 
-          console.log(employeesTable);
-          pressAnyKey("Press any key to continue", {
-            ctrlC: "reject"
-          })
-            .then(() => {
-              mainOptions();
-            })
-            .catch(() => {
-              console.log('You pressed CTRL+C')
-            })
-        }
-      });
+    }
+    });
+      // db.query("SELECT * FROM employees", function (err, results) {
+      //   if (err) {
+      //   console.log(err)
+      //   return;
+      //   } else {
+      //     let employeesTable = cTable.getTable(results) 
+      //     console.log(employeesTable);
+      //     pressAnyKey("Press any key to continue", {
+      //       ctrlC: "reject"
+      //     })
+      //       .then(() => {
+      //         mainOptions();
+      //       })
+      //       .catch(() => {
+      //         console.log('You pressed CTRL+C')
+      //       })
+      //   }
+      // });
         
     // } else if (license === 'GNU GPL v2') {
         
