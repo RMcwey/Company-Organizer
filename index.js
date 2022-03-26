@@ -50,7 +50,7 @@ function executeCommand(initialize) {
   if (initialize === 'View All Employees') {
     // sequelize show employees
     // const sql = "SELECT * FROM employees",;
-    db.query("SELECT * FROM employees", function (err, results) {
+    db.query("SELECT * FROM full_employees", function (err, results) {
       if (err) {
       console.log(err)
       return;
@@ -107,7 +107,7 @@ function executeCommand(initialize) {
       });  
 
       // this is getnew info function bracket. 
-    }
+    };
 
       // db.query("SELECT SELECT id FROM roles WHERE job_title = ")
 
@@ -165,15 +165,75 @@ function executeCommand(initialize) {
               console.log('You pressed CTRL+C')
             })
           return
-          }
-        })
+          };
+        });
       
         // first db bracket
       
       });
-    }
+    };
 // this is else for adding employee
-  }
+    } else if (initialize === "Update Employee Role") {
+      getEmployeeInfo();
+      function getEmployeeInfo () {
+        db.query("SELECT job_title FROM roles", function (err, results) {
+          if (err) {
+          console.log(err)
+          return;
+          } else {
+            roles = results;
+            var rolesArr = []
+
+            for (let i = 0; i < roles.length; i++) {
+              rolesArr[i] = roles[i].job_title
+              
+            }
+            db.query(" SELECT first_name, last_name FROM employees", function (err, mResults) {
+              if (err) {
+              console.log(err)
+              return;
+              } else {
+                managers = mResults;
+                // managers = namesR.first_name + namesR.last_name
+                console.log(managers)
+                
+                var managerArr = []
+      
+                for (let i = 0; i < managers.length; i++) {
+                  managerArr[i] = managers[i].first_name + " " + managers[i].last_name
+                }
+              }
+              updateEmployeeRole(rolesArr, managerArr)
+              // this is the end of the 2nd db query
+            })
+            // this is first else in first db query
+          };
+          // this is first db query
+        });  
+
+        // this is the function container
+      }
+      function addNewEmployee(rolesArr, managerArr) {
+        console.log(rolesArr, managerArr);
+      inquirer.prompt([
+        {
+          type: 'rawlist',
+          name: 'roles',
+          message: "Which employee would you like to update? (Use arrow keys)",
+          choices: managerArr,
+        },
+        {
+          type: 'rawlist',
+          name: 'managers',
+          message: "What is the new role? (Use arrow keys)",
+          choices: rolesArr,
+        },
+      ]).then((answers) => {
+        console.log(answers);
+      });
+    };
+      // this is else for initialize
+    }
   // this is execute funtion.
 };
 
