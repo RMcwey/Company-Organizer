@@ -48,8 +48,6 @@ inquirer.prompt([
 
 function executeCommand(initialize) {
   if (initialize === 'View All Employees') {
-    // sequelize show employees
-    // const sql = "SELECT * FROM employees",;
     db.query("SELECT * FROM full_employees", function (err, results) {
       if (err) {
       console.log(err)
@@ -70,7 +68,6 @@ function executeCommand(initialize) {
     });
 
     } else if (initialize === 'Add Employee') {
-      // var rolesArr = [];
       getEmployeeInfo();
       function getEmployeeInfo () {
       db.query("SELECT job_title FROM roles", function (err, results) {
@@ -83,7 +80,6 @@ function executeCommand(initialize) {
 
           for (let i = 0; i < roles.length; i++) {
             rolesArr[i] = roles[i].job_title
-            
           }
           db.query(" SELECT first_name, last_name FROM employees", function (err, mResults) {
             if (err) {
@@ -91,9 +87,6 @@ function executeCommand(initialize) {
             return;
             } else {
               managers = mResults;
-              // managers = namesR.first_name + namesR.last_name
-              console.log(managers)
-              
               var managerArr = []
     
               for (let i = 0; i < managers.length; i++) {
@@ -102,11 +95,8 @@ function executeCommand(initialize) {
             }
             addNewEmployee(rolesArr, managerArr)
           })
-          // addNewEmployee(rolesArr)
         };
       });  
-
-      // this is getnew info function bracket. 
     };
       
       function addNewEmployee(rolesArr, managerArr) {
@@ -135,7 +125,6 @@ function executeCommand(initialize) {
           choices: managerArr,
         },
       ]).then((answers) => {
-        console.log(answers);
         let newFName = answers.first_name
         let newLName = answers.last_name
         let newRole = answers.roles
@@ -143,8 +132,6 @@ function executeCommand(initialize) {
         let themang = newManager.split(' ')
         let mFName= themang[0]
         let mLName= themang[1]
-        // console.log(mFName)       
-        // console.log(mLName)
         updateFullEmployees();
         db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ("${newFName}", "${newLName}", (SELECT id FROM roles WHERE job_title = "${newRole}"), (SELECT id from full_employees where first_name = '${mFName}' and last_name='${mLName}'))`, function (err, results) {
           if (err) {
@@ -164,12 +151,8 @@ function executeCommand(initialize) {
           return
           };
         });
-      
-        // first db bracket
-      
       });
     };
-// this is else for adding employee
     } else if (initialize === "Update Employee Role") {
       getEmployeeInfoAgain();
       function getEmployeeInfoAgain () {
@@ -191,8 +174,6 @@ function executeCommand(initialize) {
               return;
               } else {
                 managers = mResults;
-                // managers = namesR.first_name + namesR.last_name
-                console.log(managers)
                 
                 var managerArr = []
       
@@ -201,17 +182,11 @@ function executeCommand(initialize) {
                 }
               }
               updateEmployeeRole(managerArr, rolesArr)
-              // this is the end of the 2nd db query
             })
-            // this is first else in first db query
           };
-          // this is first db query
         });  
-
-        // this is the function container
       }
       function updateEmployeeRole(managerArr, rolesArr) {
-        console.log(managerArr, rolesArr);
       inquirer.prompt([
         {
           type: 'rawlist',
@@ -226,7 +201,6 @@ function executeCommand(initialize) {
           choices: rolesArr,
         },
       ]).then((answers) => {
-        console.log(answers);
         let updateRole = answers.roles;
         let updateEmployee = answers.employees;
         let theEmp = updateEmployee.split(' ');
@@ -250,10 +224,8 @@ function executeCommand(initialize) {
           return
           };
         });
-        // then bracket
       });
     };
-      // this is else for initialize
     } else if (initialize === "View All Roles") {
       db.query("SELECT * FROM roles", function (err, results) {
         if (err) {
@@ -273,7 +245,6 @@ function executeCommand(initialize) {
             })
         }
       });
-      // this is else bracket
     } else if (initialize === "Add Role") {
       getRoleInfo();
       function getRoleInfo () {
@@ -290,18 +261,11 @@ function executeCommand(initialize) {
             
           }
             addRole(departmentsArr)
-          // this is else
         };
-        // this is db
       });
-      // this is function
     };
-      // this is getnew info function bracket. 
-    
-
 
       function addRole(departmentsArr) {
-        // console.log(managerArr, rolesArr);
       inquirer.prompt([
         {
           type: 'input',
@@ -320,15 +284,9 @@ function executeCommand(initialize) {
           choices: departmentsArr,
         },     
       ]).then((answers) => {
-        console.log(answers);
         let role = answers.role;
         let salary = answers.salary;
         let department = answers.department;
-      //   let updateRole = answers.roles;
-      //   let updateEmployee = answers.employees;
-      //   let theEmp = updateEmployee.split(' ');
-      //   let eFName= theEmp[0];
-      //   let eLName= theEmp[1];
         db.query(`INSERT INTO roles (job_title, salary, department_id) VALUES ("${role}", "${salary}", (SELECT id FROM departments WHERE department_name = "${department}"))`, function (err, results) {
           if (err) {
           console.log(err)
@@ -347,11 +305,8 @@ function executeCommand(initialize) {
           return
           };
         });
-      //   // then bracket
       });
-      // this is function
     }
-    // this is the else bracket
   } else if (initialize === "View All Departments") {
     db.query("SELECT * FROM departments", function (err, results) {
       if (err) {
@@ -371,11 +326,9 @@ function executeCommand(initialize) {
           })
       }
     });
-  // this is execute funtion.
   } else if (initialize === "Add Department") {
       addDepartment()
       function addDepartment() {
-        // console.log(managerArr, rolesArr);
       inquirer.prompt([
         {
           type: 'input',
@@ -383,7 +336,6 @@ function executeCommand(initialize) {
           message: "What is the name of the new department?",
         },
       ]).then((answers) => {
-        console.log(answers);
         let department = answers.department;
         db.query(`INSERT INTO departments (department_name) VALUES ("${department}")`, function (err, results) {
           if (err) {
