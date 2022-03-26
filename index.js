@@ -352,6 +352,25 @@ function executeCommand(initialize) {
       // this is function
     }
     // this is the else bracket
-  }
+  } else if (initialize === "View All Departments") {
+    db.query("SELECT * FROM departments", function (err, results) {
+      if (err) {
+      console.log(err)
+      return;
+      } else {
+        let departmentsTable = cTable.getTable(results) 
+        console.log(departmentsTable);
+        pressAnyKey("Press any key to continue", {
+          ctrlC: "reject"
+        })
+          .then(() => {
+            mainOptions();
+          })
+          .catch(() => {
+            console.log('You pressed CTRL+C')
+          })
+      }
+    });
   // this is execute funtion.
-};
+  }
+}
