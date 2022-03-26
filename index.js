@@ -256,6 +256,26 @@ function executeCommand(initialize) {
       });
     };
       // this is else for initialize
+    } else if (initialize === "View All Roles") {
+      db.query("SELECT * FROM roles", function (err, results) {
+        if (err) {
+        console.log(err)
+        return;
+        } else {
+          let rolesTable = cTable.getTable(results) 
+          console.log(rolesTable);
+          pressAnyKey("Press any key to continue", {
+            ctrlC: "reject"
+          })
+            .then(() => {
+              mainOptions();
+            })
+            .catch(() => {
+              console.log('You pressed CTRL+C')
+            })
+        }
+      });
+      // this is else bracket
     }
   // this is execute funtion.
 };
