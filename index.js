@@ -372,5 +372,43 @@ function executeCommand(initialize) {
       }
     });
   // this is execute funtion.
+  } else if (initialize === "Add Department") {
+      addDepartment()
+      function addDepartment() {
+        // console.log(managerArr, rolesArr);
+      inquirer.prompt([
+        {
+          type: 'input',
+          name: 'department',
+          message: "What is the name of the new department?",
+        },
+      ]).then((answers) => {
+        console.log(answers);
+        let department = answers.department;
+        db.query(`INSERT INTO departments (department_name) VALUES ("${department}")`, function (err, results) {
+          if (err) {
+          console.log(err)
+          return;
+          } else {
+          updateFullEmployees();
+          console.log("Department Added!")
+          pressAnyKey("Press any key to continue", {
+            ctrlC: "reject"
+          }).then(() => {
+              mainOptions();
+            })
+            .catch(() => {
+              console.log('You pressed CTRL+C')
+            })
+          return
+          };
+        });
+      //   // then bracket
+      });
+      // this is function
+      }
+    // this is the else bracket
+  } else if (initialize === "Quit") {
+    return console.log('You have exited the program. Thank you for using Company Organizer! Enter ctrl + c to exit, then enter node index to run again')
   }
 }
