@@ -1,10 +1,8 @@
 const inquirer = require('inquirer');
-// const fs = require('fs');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 const pressAnyKey = require('press-any-key');
 const Font = require('ascii-art-font');
-
 
 let roles = ""
 // Connect to database
@@ -28,6 +26,10 @@ Font.create('Company   Organizer', 'Doom', function(err, result) {
   }
 });
 
+function updateFullEmployees() {
+  db.query(`DROP TABLE full_employees;`);
+  db.query(`CREATE TABLE full_employees SELECT employees.id, employees.first_name, employees.last_name, roles.job_title, roles.salary, employees.role_id, manager_id FROM roles JOIN employees ON employees.role_id = roles.id;`)
+}
 
 function mainOptions () {
 inquirer.prompt([
@@ -43,6 +45,7 @@ inquirer.prompt([
   executeCommand(initialize);
 });
 }
+
 function executeCommand(initialize) {
   if (initialize === 'View All Employees') {
     // sequelize show employees
@@ -67,24 +70,50 @@ function executeCommand(initialize) {
     });
 
     } else if (initialize === 'Add Employee') {
-      
+      // var rolesArr = [];
+      getEmployeeInfo();
+      function getEmployeeInfo () {
       db.query("SELECT job_title FROM roles", function (err, results) {
         if (err) {
         console.log(err)
         return;
         } else {
-         
           roles = results;
           var rolesArr = []
-          // console.log(rolesArr);
+
           for (let i = 0; i < roles.length; i++) {
             rolesArr[i] = roles[i].job_title
-            // console.log(roles[i].job_title)
-            // console.log(rolesArr);
+            
           }
-       
+          db.query(" SELECT first_name, last_name FROM employees", function (err, mResults) {
+            if (err) {
+            console.log(err)
+            return;
+            } else {
+              managers = mResults;
+              // managers = namesR.first_name + namesR.last_name
+              console.log(managers)
+              
+              var managerArr = []
+    
+              for (let i = 0; i < managers.length; i++) {
+                managerArr[i] = managers[i].first_name + " " + managers[i].last_name
+              }
+            }
+            addNewEmployee(rolesArr, managerArr)
+          })
+          // addNewEmployee(rolesArr)
+        };
+      });  
 
-      console.log(rolesArr);
+      // this is getnew info function bracket. 
+    }
+
+      // db.query("SELECT SELECT id FROM roles WHERE job_title = ")
+
+      
+      function addNewEmployee(rolesArr, managerArr) {
+        console.log(rolesArr, managerArr);
       inquirer.prompt([
         {
           type: 'input',
@@ -102,12 +131,58 @@ function executeCommand(initialize) {
           message: "What is the employee's role? (Use arrow keys)",
           choices: rolesArr,
         },
-       
+        {
+          type: 'rawlist',
+          name: 'managers',
+          message: "Who is the employee's manager? (Use arrow keys)",
+          choices: managerArr,
+        },
       ]).then((answers) => {
         console.log(answers);
+        let newFName = answers.first_name
+        let newLName = answers.last_name
+        let newRole = answers.roles
+        let newManager = answers.managers 
+        let themang = newManager.split(' ')
+        let mFName= themang[0]
+        let mLName= themang[1]
+        // console.log(mFName)       
+        // console.log(mLName)
+        updateFullEmployees();
+        db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ("${newFName}", "${newLName}", (SELECT id FROM roles WHERE job_title = "${newRole}"), (SELECT id from full_employees where first_name = '${mFName}' and last_name='${mLName}'))`, function (err, results) {
+          if (err) {
+          console.log(err)
+          return;
+          } else {
+          console.log("new employee added!")
+          pressAnyKey("Press any key to continue", {
+            ctrlC: "reject"
+          }).then(() => {
+              
+              mainOptions();
+            })
+            .catch(() => {
+              console.log('You pressed CTRL+C')
+            })
+          return
+          }
+        })
+      
+        // first db bracket
+      
       });
     }
-    });
+// this is else for adding employee
+  }
+  // this is execute funtion.
+};
+
+// {
+//   type: 'input',
+//   message: "What would you like your title to be named?",
+//   name: "title",
+// }
+
       // db.query("SELECT * FROM employees", function (err, results) {
       //   if (err) {
       //   console.log(err)
@@ -133,11 +208,3 @@ function executeCommand(initialize) {
     // } else if (license === 'GNU GPL v3') {
         
     // }
-  }
-};
-
-// {
-//   type: 'input',
-//   message: "What would you like your title to be named?",
-//   name: "title",
-// }
