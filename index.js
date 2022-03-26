@@ -10,7 +10,7 @@ const db = mysql.createConnection(
   {
     host: 'localhost',
     user: 'root',
-    password: 'TentTree@3',
+    password: '',
     database: 'company_db'
   },
   console.log(`Connected to the company_db database.`)
@@ -88,9 +88,10 @@ function executeCommand(initialize) {
             } else {
               managers = mResults;
               var managerArr = []
-    
+              managerArr.push('null')
               for (let i = 0; i < managers.length; i++) {
                 managerArr[i] = managers[i].first_name + " " + managers[i].last_name
+                managerArr.push('null')
               }
             }
             addNewEmployee(rolesArr, managerArr)
@@ -100,7 +101,6 @@ function executeCommand(initialize) {
     };
       
       function addNewEmployee(rolesArr, managerArr) {
-        console.log(rolesArr, managerArr);
       inquirer.prompt([
         {
           type: 'input',
@@ -125,14 +125,14 @@ function executeCommand(initialize) {
           choices: managerArr,
         },
       ]).then((answers) => {
-        let newFName = answers.first_name
-        let newLName = answers.last_name
-        let newRole = answers.roles
-        let newManager = answers.managers 
-        let themang = newManager.split(' ')
-        let mFName= themang[0]
-        let mLName= themang[1]
-        updateFullEmployees();
+        let newFName = answers.first_name;
+        let newLName = answers.last_name;
+        let newRole = answers.roles;
+        let newManager = answers.managers;
+        let themang = newManager.split(' ');
+        let mFName= themang[0];
+        let mLName= themang[1];
+        
         db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ("${newFName}", "${newLName}", (SELECT id FROM roles WHERE job_title = "${newRole}"), (SELECT id from full_employees where first_name = '${mFName}' and last_name='${mLName}'))`, function (err, results) {
           if (err) {
           console.log(err)
@@ -142,7 +142,7 @@ function executeCommand(initialize) {
           pressAnyKey("Press any key to continue", {
             ctrlC: "reject"
           }).then(() => {
-              
+              updateFullEmployees();
               mainOptions();
             })
             .catch(() => {
