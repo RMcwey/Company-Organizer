@@ -174,8 +174,8 @@ function executeCommand(initialize) {
     };
 // this is else for adding employee
     } else if (initialize === "Update Employee Role") {
-      getEmployeeInfo();
-      function getEmployeeInfo () {
+      getEmployeeInfoAgain();
+      function getEmployeeInfoAgain () {
         db.query("SELECT job_title FROM roles", function (err, results) {
           if (err) {
           console.log(err)
@@ -203,7 +203,7 @@ function executeCommand(initialize) {
                   managerArr[i] = managers[i].first_name + " " + managers[i].last_name
                 }
               }
-              updateEmployeeRole(rolesArr, managerArr)
+              updateEmployeeRole(managerArr, rolesArr)
               // this is the end of the 2nd db query
             })
             // this is first else in first db query
@@ -213,18 +213,18 @@ function executeCommand(initialize) {
 
         // this is the function container
       }
-      function addNewEmployee(rolesArr, managerArr) {
-        console.log(rolesArr, managerArr);
+      function updateEmployeeRole(managerArr, rolesArr) {
+        console.log(managerArr, rolesArr);
       inquirer.prompt([
         {
           type: 'rawlist',
-          name: 'roles',
+          name: 'employees',
           message: "Which employee would you like to update? (Use arrow keys)",
           choices: managerArr,
         },
         {
           type: 'rawlist',
-          name: 'managers',
+          name: 'roles',
           message: "What is the new role? (Use arrow keys)",
           choices: rolesArr,
         },
