@@ -108,9 +108,6 @@ function executeCommand(initialize) {
 
       // this is getnew info function bracket. 
     };
-
-      // db.query("SELECT SELECT id FROM roles WHERE job_title = ")
-
       
       function addNewEmployee(rolesArr, managerArr) {
         console.log(rolesArr, managerArr);
@@ -253,6 +250,7 @@ function executeCommand(initialize) {
           return
           };
         });
+        // then bracket
       });
     };
       // this is else for initialize
@@ -276,38 +274,84 @@ function executeCommand(initialize) {
         }
       });
       // this is else bracket
+    } else if (initialize === "Add Role") {
+      getRoleInfo();
+      function getRoleInfo () {
+      db.query("SELECT department_name FROM departments", function (err, results) {
+        if (err) {
+        console.log(err)
+        return;
+        } else {
+          departments = results;
+          var departmentsArr = []
+
+          for (let i = 0; i < departments.length; i++) {
+            departmentsArr[i] = departments[i].department_name
+            
+          }
+            addRole(departmentsArr)
+          // this is else
+        };
+        // this is db
+      });
+      // this is function
+    };
+      // this is getnew info function bracket. 
+    
+
+
+      function addRole(departmentsArr) {
+        // console.log(managerArr, rolesArr);
+      inquirer.prompt([
+        {
+          type: 'input',
+          name: 'role',
+          message: "What is the role you would like to add?",
+        },
+        {
+          type: 'input',
+          name: 'salary',
+          message: "How much will this role make?",
+        },
+        {
+          type: 'rawlist',
+          name: 'department',
+          message: "Which department does this role belong to? (Use arrow keys)",
+          choices: departmentsArr,
+        },     
+      ]).then((answers) => {
+        console.log(answers);
+        let role = answers.role;
+        let salary = answers.salary;
+        let department = answers.department;
+      //   let updateRole = answers.roles;
+      //   let updateEmployee = answers.employees;
+      //   let theEmp = updateEmployee.split(' ');
+      //   let eFName= theEmp[0];
+      //   let eLName= theEmp[1];
+        db.query(`INSERT INTO roles (job_title, salary, department_id) VALUES ("${role}", "${salary}", (SELECT id FROM departments WHERE department_name = "${department}"))`, function (err, results) {
+          if (err) {
+          console.log(err)
+          return;
+          } else {
+          updateFullEmployees();
+          console.log("Role Added!")
+          pressAnyKey("Press any key to continue", {
+            ctrlC: "reject"
+          }).then(() => {
+              mainOptions();
+            })
+            .catch(() => {
+              console.log('You pressed CTRL+C')
+            })
+          return
+          };
+        });
+      //   // then bracket
+      });
+      // this is function
     }
+    // this is the else bracket
+  }
   // this is execute funtion.
 };
-
-// {
-//   type: 'input',
-//   message: "What would you like your title to be named?",
-//   name: "title",
-// }
-
-      // db.query("SELECT * FROM employees", function (err, results) {
-      //   if (err) {
-      //   console.log(err)
-      //   return;
-      //   } else {
-      //     let employeesTable = cTable.getTable(results) 
-      //     console.log(employeesTable);
-      //     pressAnyKey("Press any key to continue", {
-      //       ctrlC: "reject"
-      //     })
-      //       .then(() => {
-      //         mainOptions();
-      //       })
-      //       .catch(() => {
-      //         console.log('You pressed CTRL+C')
-      //       })
-      //   }
-      // });
-        
-    // } else if (license === 'GNU GPL v2') {
-        
-
-    // } else if (license === 'GNU GPL v3') {
-        
-    // }
