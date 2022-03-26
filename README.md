@@ -22,9 +22,9 @@
 ## Installation
 
 1. Clone repository
-2. Run `npm i`
-3. Open the terminal
-4. Enter `node index`
+2. Open the terminal
+3. Run `npm i`
+5. Enter `node index`
 
 
 ## Usage
