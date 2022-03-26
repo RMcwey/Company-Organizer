@@ -230,6 +230,29 @@ function executeCommand(initialize) {
         },
       ]).then((answers) => {
         console.log(answers);
+        let updateRole = answers.roles;
+        let updateEmployee = answers.employees;
+        let theEmp = updateEmployee.split(' ');
+        let eFName= theEmp[0];
+        let eLName= theEmp[1];
+        db.query(`UPDATE employees SET role_id = (SELECT id FROM roles WHERE job_title = "${updateRole}") WHERE id = (SELECT id from full_employees where first_name = '${eFName}' and last_name='${eLName}')`, function (err, results) {
+          if (err) {
+          console.log(err)
+          return;
+          } else {
+          updateFullEmployees();
+          console.log("Employee Role Updated!")
+          pressAnyKey("Press any key to continue", {
+            ctrlC: "reject"
+          }).then(() => {
+              mainOptions();
+            })
+            .catch(() => {
+              console.log('You pressed CTRL+C')
+            })
+          return
+          };
+        });
       });
     };
       // this is else for initialize
