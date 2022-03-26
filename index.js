@@ -47,6 +47,7 @@ inquirer.prompt([
 }
 
 function executeCommand(initialize) {
+  updateFullEmployees()
   if (initialize === 'View All Employees') {
     db.query("SELECT * FROM full_employees", function (err, results) {
       if (err) {
