@@ -22,9 +22,14 @@
 ## Installation
 
 1. Clone repository
-2. Open the terminal
-3. Run `npm i`
-5. Enter `node index`
+2. Open the `index.js` file
+3. On line 13 update your "mySQL" password
+4. Open Terminal under root folder, so on index.js
+5. Enter `mysql -u root -p`, then enter your password.
+6. Now only run `source db/schema.sql` and then run `source db/seeds.sql`
+7. Now enter `quit` to get back to root folder
+8. Run `npm i`
+9. Enter `node index`
 
 
 ## Usage
