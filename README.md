@@ -38,9 +38,11 @@
 
 Video Walkthrough: https://drive.google.com/file/d/14oi7m4m6zXFFYzJ6E9K1jisigQNdG_Jg/view
 
+![image](https://user-images.githubusercontent.com/95650769/160247598-448dcf8e-9f52-4267-a364-1dd86b8fc89e.png)
 
+![image](https://user-images.githubusercontent.com/95650769/160247634-dbe1b404-b20c-4962-af92-1047c502e690.png)
 
-Include screenshots as needed.
+![image](https://user-images.githubusercontent.com/95650769/160247652-49e9de51-2129-401a-afb6-375f58e49e8f.png)
 
 ## Credits
 Ross McWey
